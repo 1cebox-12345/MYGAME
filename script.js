@@ -125,10 +125,15 @@ function toggleMute() {
     }
 }
 
-// ============ GAME SETTINGS ============
+// Game Settings
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
 let score = 0;
+
+// High Score
+const highScoreElement = document.getElementById('high-score');
+let highScore = localStorage.getItem('snakeHighScore') || 0;
+highScoreElement.innerText = highScore;
 
 // Snake
 let snake = [
@@ -227,6 +232,13 @@ function isGameOver() {
     if (gameOver) {
         stopMusic(); // Stop background music
         playGameOverSound(); // Play game over sound
+
+        // Update High Score
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('snakeHighScore', highScore);
+            highScoreElement.innerText = highScore;
+        }
 
         ctx.fillStyle = 'white';
         ctx.font = '50px Verdana';
