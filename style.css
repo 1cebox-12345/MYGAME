@@ -38,6 +38,26 @@ canvas {
     color: #ff00ff;
     text-shadow: 0 0 10px #ff00ff;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.sound-btn {
+    background: transparent;
+    border: 2px solid #ff00ff;
+    color: #ff00ff;
+    font-size: 1.5rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sound-btn:hover {
+    background: #ff00ff;
+    color: #000;
 }
 
 .controls-hint {

@@ -2,7 +2,125 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 
-// Game Settings
+// ============ AUDIO SYSTEM ============
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+let isMuted = false;
+let musicPlaying = false;
+let musicInterval = null;
+
+// Initialize audio on first user interaction
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new AudioContext();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+// Sound effect: Eat food
+function playEatSound() {
+    if (!audioCtx || isMuted) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.15);
+}
+
+// Sound effect: Game Over
+function playGameOverSound() {
+    if (!audioCtx || isMuted) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
+
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.5);
+}
+
+// Background Music - Synthwave style
+const musicNotes = [
+    { freq: 130.81, dur: 0.2 }, // C3
+    { freq: 164.81, dur: 0.2 }, // E3
+    { freq: 196.00, dur: 0.2 }, // G3
+    { freq: 261.63, dur: 0.2 }, // C4
+    { freq: 196.00, dur: 0.2 }, // G3
+    { freq: 164.81, dur: 0.2 }, // E3
+    { freq: 146.83, dur: 0.2 }, // D3
+    { freq: 174.61, dur: 0.2 }, // F3
+];
+let musicNoteIndex = 0;
+
+function playMusicNote() {
+    if (!audioCtx || isMuted || !musicPlaying) return;
+
+    const note = musicNotes[musicNoteIndex];
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(note.freq, audioCtx.currentTime);
+
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + note.dur);
+
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + note.dur);
+
+    musicNoteIndex = (musicNoteIndex + 1) % musicNotes.length;
+}
+
+function startMusic() {
+    if (musicPlaying) return;
+    initAudio();
+    musicPlaying = true;
+    musicInterval = setInterval(playMusicNote, 250);
+}
+
+function stopMusic() {
+    musicPlaying = false;
+    if (musicInterval) {
+        clearInterval(musicInterval);
+        musicInterval = null;
+    }
+}
+
+function toggleMute() {
+    isMuted = !isMuted;
+    const soundBtn = document.getElementById('sound-btn');
+    if (soundBtn) {
+        soundBtn.textContent = isMuted ? '🔇' : '🔊';
+    }
+    if (isMuted) {
+        stopMusic();
+    } else {
+        startMusic();
+    }
+}
+
+// ============ GAME SETTINGS ============
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
 let score = 0;
@@ -78,6 +196,7 @@ function checkAppleCollision() {
         score++;
         scoreElement.innerText = score;
         snake.push({}); // Grow snake
+        playEatSound(); // Play eat sound
         // Respawn food
         food.x = Math.floor(Math.random() * tileCount);
         food.y = Math.floor(Math.random() * tileCount);
@@ -101,6 +220,9 @@ function isGameOver() {
     }
 
     if (gameOver) {
+        stopMusic(); // Stop background music
+        playGameOverSound(); // Play game over sound
+
         ctx.fillStyle = 'white';
         ctx.font = '50px Verdana';
         ctx.fillText('Game Over!', canvas.width / 6.5, canvas.height / 2);
@@ -123,6 +245,7 @@ function restartGame(event) {
         score = 0;
         scoreElement.innerText = score;
         dx = 1; dy = 0;
+        startMusic(); // Resume background music
         drawGame();
     }
 }
@@ -176,6 +299,7 @@ restartBtn.addEventListener('click', () => {
     score = 0;
     scoreElement.innerText = score;
     dx = 1; dy = 0;
+    startMusic(); // Resume background music
     drawGame();
 });
 
@@ -227,3 +351,22 @@ function handleSwipe() {
 
 // Start Game
 drawGame();
+
+// Sound toggle button
+const soundBtn = document.getElementById('sound-btn');
+if (soundBtn) {
+    soundBtn.addEventListener('click', toggleMute);
+}
+
+// Initialize audio and start music on first interaction
+document.body.addEventListener('click', function initOnClick() {
+    initAudio();
+    startMusic();
+    document.body.removeEventListener('click', initOnClick);
+}, { once: true });
+
+document.body.addEventListener('keydown', function initOnKey() {
+    initAudio();
+    startMusic();
+    document.body.removeEventListener('keydown', initOnKey);
+}, { once: true });
