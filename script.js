@@ -108,6 +108,9 @@ function stopMusic() {
 }
 
 function toggleMute() {
+    // Initialize audio on first interaction
+    initAudio();
+
     isMuted = !isMuted;
     const soundBtn = document.getElementById('sound-btn');
     if (soundBtn) {
@@ -116,6 +119,8 @@ function toggleMute() {
     if (isMuted) {
         stopMusic();
     } else {
+        // Play a test beep to confirm audio works
+        playEatSound();
         startMusic();
     }
 }
