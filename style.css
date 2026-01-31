@@ -5,6 +5,10 @@
 
 body {
     background-color: #050505;
+    background-image: url('background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
@@ -21,10 +25,17 @@ body {
 .game-container {
     text-align: center;
     position: relative;
+    /* Add semi-transparent background to make game stand out */
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
 }
 
 canvas {
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* More transparent black */
     border: 2px solid #0ff;
     box-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
     display: block;
