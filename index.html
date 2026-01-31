@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Snake 霓虹貪吃蛇</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <div class="score-board">
+            分數: <span id="score">0</span>
+        </div>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div class="controls-hint">使用方向鍵或是 WASD 控制</div>
+
+        <!-- Mobile Controls -->
+        <div class="mobile-controls">
+            <button id="btn-up" class="control-btn">▲</button>
+            <div class="horizontal-controls">
+                <button id="btn-left" class="control-btn">◀</button>
+                <button id="btn-down" class="control-btn">▼</button>
+                <button id="btn-right" class="control-btn">▶</button>
+            </div>
+        </div>
+        <button id="restart-btn" class="restart-btn">🔄 重新開始</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #050505;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 10px;
+    overflow: hidden;
+    touch-action: none;
+}
+
+.game-container {
+    text-align: center;
+    position: relative;
+}
+
+canvas {
+    background-color: #000;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+    touch-action: none;
+}
+
+.score-board {
+    font-size: 2rem;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff;
+    margin-bottom: 10px;
+}
+
+.controls-hint {
+    color: #888;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+/* Mobile Controls */
+.mobile-controls {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.horizontal-controls {
+    display: flex;
+    gap: 20px;
+}
+
+.control-btn {
+    background-color: #111;
+    color: #0ff;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 10px #0ff;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s ease;
+}
+
+.control-btn:active {
+    background-color: #0ff;
+    color: #000;
+    box-shadow: 0 0 20px #0ff;
+}
+
+/* Restart button for mobile */
+.restart-btn {
+    background: linear-gradient(135deg, #ff00ff, #00ffff);
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    display: none;
+    touch-action: manipulation;
+}
+
+.restart-btn.visible {
+    display: block;
+}
+
+/* Hide mobile controls on desktop */
+@media (min-width: 768px) {
+    .mobile-controls {
+        display: none;
+    }
+
+    .controls-hint {
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .controls-hint {
+        display: none;
+    }
+
+    .score-board {
+        font-size: 1.5rem;
+    }
+}
