@@ -254,20 +254,21 @@ function restartGame(event) {
 document.body.addEventListener('keydown', keyDown);
 
 function keyDown(event) {
+    const key = event.key.toLowerCase();
     // Up
-    if (event.keyCode == 38 || event.key === 'w') {
+    if (event.keyCode == 38 || key === 'w') {
         moveUp();
     }
     // Down
-    if (event.keyCode == 40 || event.key === 's') {
+    if (event.keyCode == 40 || key === 's') {
         moveDown();
     }
     // Left
-    if (event.keyCode == 37 || event.key === 'a') {
+    if (event.keyCode == 37 || key === 'a') {
         moveLeft();
     }
     // Right
-    if (event.keyCode == 39 || event.key === 'd') {
+    if (event.keyCode == 39 || key === 'd') {
         moveRight();
     }
 }
